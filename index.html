@@ -420,7 +420,7 @@
             </div>
 
             <!-- Teacher Manage Class Prompts Panel with Essay Part Assignment -->
-            <div id="teacherPromptManager" class="pastel-card p-5 rounded-2xl border-2 border-purple-200">
+            <div id="teacherPromptManager" style="display: none;" class="pastel-card p-5 rounded-2xl border-2 border-purple-200">
                 <div class="flex flex-wrap justify-between items-center gap-2 mb-3">
                     <h3 class="font-display font-bold text-purple-900 text-base flex items-center gap-2">
                         <i class="fa-solid fa-list-check text-purple-600"></i> Teacher Assignment & Folder Manager
@@ -1441,20 +1441,24 @@ Fortunately, local volunteers helped us evacuation safely. It was a memorable ex
         }
 
         function verifyTeacherPasscode(e) {
-            e.preventDefault();
-            const val = document.getElementById('passcodeInput').value;
-            if (val === '1119') {
-                isTeacherUnlocked = true;
-                document.getElementById('teacherLockIcon').className = 'fa-solid fa-lock-open text-emerald-300';
-                document.getElementById('teacherLockText').innerText = 'Teacher Portal (Unlocked)';
-                document.getElementById('teacherPortalBtn').className = 'bg-emerald-600 text-white font-bold px-4 py-2 rounded-xl text-sm shadow-md transition-all flex items-center gap-2';
-                toggleTeacherPortalModal();
-                alert('✨ Teacher Portal Unlocked!');
-                renderEssaysList();
-            } else {
-                document.getElementById('passcodeError').classList.remove('hidden');
-            }
-        }
+    e.preventDefault();
+    const val = document.getElementById('passcodeInput').value;
+    if (val === '1119') {
+        isTeacherUnlocked = true;
+        document.getElementById('teacherLockIcon').className = 'fa-solid fa-lock-open text-emerald-300';
+        document.getElementById('teacherLockText').innerText = 'Teacher Portal (Unlocked)';
+        document.getElementById('teacherPortalBtn').className = 'bg-emerald-600 text-white font-bold px-4 py-2 rounded-xl text-sm shadow-md transition-all flex items-center gap-2';
+        toggleTeacherPortalModal();
+        alert('✨ Teacher Portal Unlocked!');
+        
+        // REVEAL THE TEACHER MANAGER PANEL UPON UNLOCKING
+        document.getElementById('teacherPromptManager').style.display = 'block';
+
+        renderEssaysList();
+    } else {
+        document.getElementById('passcodeError').classList.remove('hidden');
+    }
+}
 
         function openReviewModal(essayId) {
             currentReviewId = essayId;
