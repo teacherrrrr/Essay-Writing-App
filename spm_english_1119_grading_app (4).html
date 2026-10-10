@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ SPM 1119 Essay Palette ✨</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js for Teacher Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastel: {
+                            lavender: '#E8DFF5',
+                            lavenderDark: '#C1A1E8',
+                            mint: '#A0E7E5',
+                            mintDark: '#67D2CF',
+                            blush: '#FBE7C6',
+                            yellow: '#FFF5C1',
+                            sky: '#B4F8C8',
+                            pink: '#F7D6E0',
+                            purple: '#9B51E0',
+                            bg: '#FCFAFF'
+                        }
+                    },
+                    fontFamily: {
+                        display: ['Fredoka', 'sans-serif'],
+                        body: ['Quicksand', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #FCFAFF;
+            background-image: radial-gradient(#E8DFF5 2px, transparent 2px), radial-gradient(#A0E7E5 2px, #FCFAFF 2px);
+            background-size: 50px 50px;
+            background-position: 0 0, 25px 25px;
+        }
+        
+        .font-display {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FCFAFF;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #C1A1E8;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9B51E0;
+        }
+
+        /* Float animation */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-6px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .pastel-shadow {
+            box-shadow: 0 10px 25px -5px rgba(193, 161, 232, 0.25);
+        }
+
+        .pastel-card {
+            background: rgba(255, 255, 255, 0.93);
+            backdrop-filter: blur(8px);
+            border: 2px solid #E8DFF5;
+        }
+
+        /* Speedometer Needle Transition */
+        .needle-transition {
+            transition: transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-origin: 100px 100px;
+        }
+
+        /* Printable Report Styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printableReport, #printableReport * {
+                visibility: visible;
+            }
+            #printableReport {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                background: white !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="text-gray-700 min-h-screen flex flex-col justify-between selection:bg-pastel-pink selection:text-purple-900">
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-30 bg-white/85 backdrop-blur-md border-b-2 border-pastel-lavender px-4 lg:px-8 py-3">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+            <!-- Logo -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('submission')">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-pastel-pink to-pastel-lavender flex items-center justify-center text-purple-700 text-xl shadow-md animate-float">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </div>
+                <div>
+                    <h1 class="font-display font-bold text-xl lg:text-2xl text-purple-900 tracking-wide">
+                        ✨ SPM 1119 Essay Palette
+                    </h1>
+                    <span class="inline-block bg-pastel-blush text-amber-800 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-amber-200">
+                        CEFR / KSSM English Standard
+                    </span>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <nav class="flex items-center gap-2 bg-pastel-lavender/40 p-1.5 rounded-2xl border border-pastel-lavender">
+                <button id="nav-submission" onclick="switchTab('submission')" class="nav-btn bg-white text-purple-900 font-medium px-4 py-2 rounded-xl text-sm shadow-sm transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-pen-nib"></i> Student Submit
+                </button>
+                <button id="nav-folders" onclick="switchTab('folders')" class="nav-btn text-gray-600 hover:text-purple-900 font-medium px-4 py-2 rounded-xl text-sm transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-folder-open"></i> Class Folders
+                </button>
+                <button id="nav-analytics" onclick="switchTab('analytics')" class="nav-btn text-gray-600 hover:text-purple-900 font-medium px-4 py-2 rounded-xl text-sm transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-chart-pie"></i> Analytics
+                </button>
+            </nav>
+
+            <!-- Teacher Portal Unlock Button -->
+            <div class="flex items-center gap-2">
+                <button id="teacherPortalBtn" onclick="toggleTeacherPortalModal()" class="bg-gradient-to-r from-pastel-lavenderDark to-purple-400 hover:from-purple-400 hover:to-purple-500 text-white font-bold px-4 py-2 rounded-xl text-sm shadow-md transition-all flex items-center gap-2">
+                    <i id="teacherLockIcon" class="fa-solid fa-lock"></i>
+                    <span id="teacherLockText">Teacher Portal</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 lg:px-8 py-6 flex-grow w-full">
+
+        <!-- TAB 1: Student Submission View -->
+        <section id="tab-submission" class="tab-content block space-y-6">
+            <div class="text-center max-w-2xl mx-auto mb-4">
+                <h2 class="font-display text-3xl font-bold text-purple-900">Write & Grade Your SPM Essay</h2>
+                <p class="text-gray-600 mt-1">Get instant CEFR feedback, red error corrections, and AI authenticity scanning!</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Left Column: Input Form -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="pastel-card rounded-3xl p-6 shadow-sm">
+                        <form id="essayForm" onsubmit="handleEssaySubmit(event)" class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-1">Student Name ✨</label>
+                                    <input type="text" id="studentName" required placeholder="e.g. Nur Aisyah Binti Ahmad" class="w-full px-4 py-2.5 rounded-xl border-2 border-pastel-lavender focus:border-purple-400 focus:outline-none transition-colors bg-white/80">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-1">Select Class 🏫</label>
+                                    <select id="studentClass" onchange="onClassSelected()" required class="w-full px-4 py-2.5 rounded-xl border-2 border-pastel-lavender focus:border-purple-400 focus:outline-none transition-colors bg-white/80">
+                                        <!-- Options populated dynamically -->
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Teacher Assigned Question & Part Banner -->
+                            <div id="classPromptBanner" class="p-4 rounded-2xl bg-gradient-to-r from-pastel-pink/50 via-pastel-lavender/50 to-pastel-mint/50 border-2 border-purple-200 space-y-2">
+                                <div class="flex flex-wrap justify-between items-center gap-2">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-purple-900 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-thumbtack text-purple-600"></i> Assigned Task Details
+                                    </span>
+                                    <span id="assignedPartBadge" class="bg-purple-600 text-white font-bold text-xs px-3 py-1 rounded-full shadow-2xs">
+                                        Part 3 - Extended Writing
+                                    </span>
+                                </div>
+                                <div class="bg-white/80 p-3 rounded-xl border border-purple-100">
+                                    <p id="assignedQuestionText" class="text-xs font-medium text-gray-800 italic leading-relaxed">
+                                        Select your class above to display your teacher's assigned question task.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between items-center mb-1">
+                                    <label class="block text-sm font-semibold text-gray-700">Essay Content 📝</label>
+                                    <span id="wordCountBadge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-pastel-mint text-teal-800">
+                                        Words: 0
+                                    </span>
+                                </div>
+                                <textarea id="essayBody" rows="11" required oninput="evaluateEssayLive()" placeholder="Type or paste your SPM essay response here..." class="w-full p-4 rounded-xl border-2 border-pastel-lavender focus:border-purple-400 focus:outline-none transition-colors bg-white/80 leading-relaxed font-body"></textarea>
+                                
+                                <div id="wordCountWarning" class="text-xs mt-1.5 text-amber-600 font-medium hidden flex items-center gap-1">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    <span>Word count is outside the target range for this exercise!</span>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-3 pt-2">
+                                <button type="submit" class="flex-1 bg-gradient-to-r from-pastel-mintDark to-emerald-400 hover:from-emerald-400 hover:to-emerald-500 text-teal-950 font-bold py-3 px-6 rounded-2xl shadow-sm transition-all text-center flex items-center justify-center gap-2 font-display">
+                                    <i class="fa-solid fa-paper-plane"></i> Submit & Annotate Errors
+                                </button>
+                                <button type="button" onclick="loadSamplePrompt()" class="bg-pastel-yellow hover:bg-yellow-200 text-amber-900 font-semibold px-4 py-3 rounded-2xl border border-amber-200 transition-all text-xs flex items-center gap-1.5">
+                                    <i class="fa-solid fa-lightbulb text-amber-600"></i> Sample Draft
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Instant Red Error Annotations Section -->
+                    <div id="annotationContainer" class="pastel-card rounded-3xl p-6 shadow-md border-2 border-rose-200 hidden space-y-4">
+                        <div class="flex justify-between items-center border-b border-rose-100 pb-3">
+                            <h3 class="font-display font-bold text-lg text-rose-900 flex items-center gap-2">
+                                <i class="fa-solid fa-file-circle-exclamation text-rose-500"></i> Live Red Error Annotations & Corrections
+                            </h3>
+                            <span id="errorCountBadge" class="bg-rose-100 text-rose-800 text-xs font-bold px-2.5 py-1 rounded-full">
+                                0 Errors Found
+                            </span>
+                        </div>
+
+                        <!-- Highlighted Essay Text Area -->
+                        <div class="bg-white p-4 rounded-2xl border border-rose-100 shadow-2xs">
+                            <h4 class="text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">Annotated Essay Text</h4>
+                            <div id="annotatedTextDisplay" class="text-sm leading-relaxed whitespace-pre-wrap font-body text-gray-800">
+                                <!-- Dynamic Annotated Output -->
+                            </div>
+                        </div>
+
+                        <!-- Correction Breakdown List -->
+                        <div class="space-y-2">
+                            <h4 class="text-xs font-bold text-gray-700 flex items-center gap-1">
+                                <i class="fa-solid fa-list-check text-emerald-500"></i> Corrections & Learning Points:
+                            </h4>
+                            <div id="errorBreakdownList" class="space-y-2 max-h-60 overflow-y-auto pr-1">
+                                <!-- Error List Cards -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Pre-Grading Engine Output & Big AI Speedometer Meter -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="pastel-card rounded-3xl p-6 shadow-md border-2 border-pastel-pink/60 sticky top-20">
+                        <div class="flex justify-between items-center pb-3 border-b border-pastel-lavender">
+                            <h3 class="font-display font-bold text-lg text-purple-900 flex items-center gap-2">
+                                <i class="fa-solid fa-robot text-purple-500"></i> Assessment & AI Scan
+                            </h3>
+                            <span class="text-xs bg-purple-100 text-purple-700 px-2.5 py-1 rounded-full font-semibold">Automated SPM Rubric</span>
+                        </div>
+
+                        <!-- Overall Estimated Score -->
+                        <div class="my-3 text-center p-3 rounded-2xl bg-gradient-to-r from-pastel-pink/40 via-pastel-lavender/40 to-pastel-mint/40 border border-purple-100">
+                            <span class="text-xs uppercase tracking-wider text-purple-800 font-bold">Predicted Mark & Grade</span>
+                            <div class="flex items-center justify-center gap-3 my-1">
+                                <span id="preMarkDisplay" class="font-display text-4xl font-extrabold text-purple-900">0 / 20</span>
+                                <span id="preGradeBadge" class="bg-purple-600 text-white font-bold px-3 py-1 rounded-xl text-sm shadow-sm">Band --</span>
+                            </div>
+                            <span id="scaledMarkDisplay" class="text-xs text-gray-600 font-medium">Scaled Score: 0 / 40 marks</span>
+                        </div>
+
+                        <!-- PROMINENT BIG AI SPEEDOMETER GAUGE METER -->
+                        <div class="mb-4 p-4 rounded-3xl bg-white border-2 border-purple-100 shadow-2xs flex flex-col items-center">
+                            <div class="w-full flex justify-between items-center text-xs font-bold mb-1">
+                                <span class="text-purple-900 flex items-center gap-1.5 text-sm">
+                                    <i class="fa-solid fa-gauge-high text-purple-600"></i> AI Authenticity Meter
+                                </span>
+                                <span id="aiPercentBigText" class="text-base font-extrabold text-emerald-600">0% AI</span>
+                            </div>
+
+                            <!-- SVG Speedometer Arc -->
+                            <div class="relative w-48 h-28 my-1 flex items-center justify-center">
+                                <svg class="w-48 h-28" viewBox="0 0 200 110">
+                                    <!-- Background Arc -->
+                                    <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#E5E7EB" stroke-width="18" stroke-linecap="round" />
+                                    <!-- Pastel Gradient Colored Gauge Arc -->
+                                    <path id="speedometerArc" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="url(#pastelGaugeGrad)" stroke-width="18" stroke-linecap="round" stroke-dasharray="251.2" stroke-dashoffset="251.2" class="transition-all duration-700 ease-out" />
+                                    <defs>
+                                        <linearGradient id="pastelGaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                            <stop offset="0%" stop-color="#34D399" />
+                                            <stop offset="50%" stop-color="#FBBF24" />
+                                            <stop offset="100%" stop-color="#F87171" />
+                                        </linearGradient>
+                                    </defs>
+                                    <!-- Needle -->
+                                    <g id="needleGroup" class="needle-transition" style="transform: rotate(-90deg);">
+                                        <line x1="100" y1="100" x2="35" y2="100" stroke="#4C1D95" stroke-width="4" stroke-linecap="round" />
+                                        <circle cx="100" cy="100" r="7" fill="#4C1D95" />
+                                        <circle cx="100" cy="100" r="3" fill="#FFFFFF" />
+                                    </g>
+                                </svg>
+                            </div>
+
+                            <!-- Dynamic Big Verdict Badge -->
+                            <div class="text-center mt-1">
+                                <span id="aiVerdictBigBadge" class="font-display font-bold text-sm px-4 py-1 rounded-full bg-emerald-100 text-emerald-800 shadow-2xs">
+                                    Human Heart & Soul 💖
+                                </span>
+                                <p class="text-[11px] text-gray-400 mt-1">Real-time Syntactical Regularity Scan</p>
+                            </div>
+                        </div>
+
+                        <!-- Detailed Rubrics Breakdown -->
+                        <div class="space-y-2">
+                            <!-- Content -->
+                            <div class="p-2.5 rounded-xl bg-white border border-gray-100 shadow-2xs">
+                                <div class="flex justify-between text-xs font-bold mb-1">
+                                    <span class="text-gray-700">Content (C)</span>
+                                    <span id="scoreC" class="text-purple-600">0 / 5</span>
+                                </div>
+                                <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+                                    <div id="barC" class="bg-pastel-mintDark h-full transition-all duration-300" style="width: 0%"></div>
+                                </div>
+                            </div>
+
+                            <!-- Communicative Achievement -->
+                            <div class="p-2.5 rounded-xl bg-white border border-gray-100 shadow-2xs">
+                                <div class="flex justify-between text-xs font-bold mb-1">
+                                    <span class="text-gray-700">Communicative Achievement (CA)</span>
+                                    <span id="scoreCA" class="text-purple-600">0 / 5</span>
+                                </div>
+                                <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+                                    <div id="barCA" class="bg-blue-400 h-full transition-all duration-300" style="width: 0%"></div>
+                                </div>
+                            </div>
+
+                            <!-- Organisation -->
+                            <div class="p-2.5 rounded-xl bg-white border border-gray-100 shadow-2xs">
+                                <div class="flex justify-between text-xs font-bold mb-1">
+                                    <span class="text-gray-700">Organisation (O)</span>
+                                    <span id="scoreO" class="text-purple-600">0 / 5</span>
+                                </div>
+                                <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+                                    <div id="barO" class="bg-amber-300 h-full transition-all duration-300" style="width: 0%"></div>
+                                </div>
+                            </div>
+
+                            <!-- Language -->
+                            <div class="p-2.5 rounded-xl bg-white border border-gray-100 shadow-2xs">
+                                <div class="flex justify-between text-xs font-bold mb-1">
+                                    <span class="text-gray-700">Language (L)</span>
+                                    <span id="scoreL" class="text-purple-600">0 / 5</span>
+                                </div>
+                                <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+                                    <div id="barL" class="bg-pastel-pinkDark h-full transition-all duration-300" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Instant AI-like Feedback Tips -->
+                        <div class="mt-3 pt-2.5 border-t border-pastel-lavender">
+                            <h4 class="font-display font-semibold text-xs text-gray-800 mb-1 flex items-center gap-1.5">
+                                <i class="fa-solid fa-sparkles text-amber-400"></i> Writing Tips:
+                            </h4>
+                            <ul id="feedbackList" class="space-y-1 text-xs text-gray-600">
+                                <li class="flex items-start gap-1.5"><i class="fa-solid fa-circle-check text-emerald-500 mt-0.5"></i> Begin typing your essay to view real-time feedback!</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: Class Folders & Essay Repository -->
+        <section id="tab-folders" class="tab-content hidden space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="font-display text-3xl font-bold text-purple-900">Class Folders Repository</h2>
+                    <p class="text-gray-600">Explore submitted SPM 1119 essays organized by class sections.</p>
+                </div>
+
+                <!-- Class Filter Tabs -->
+                <div id="classFilterContainer" class="flex flex-wrap gap-2">
+                    <!-- Dynamic Class Filter Buttons -->
+                </div>
+            </div>
+
+            <!-- Class Statistics Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="pastel-card p-4 rounded-2xl border-l-4 border-l-purple-500">
+                    <span class="text-xs font-semibold text-gray-500 uppercase">Total Essays</span>
+                    <p id="totalEssaysCount" class="font-display text-2xl font-bold text-purple-900">0</p>
+                </div>
+                <div class="pastel-card p-4 rounded-2xl border-l-4 border-l-emerald-400">
+                    <span class="text-xs font-semibold text-gray-500 uppercase">Class Average</span>
+                    <p id="classAvgMark" class="font-display text-2xl font-bold text-emerald-700">0.0 / 20</p>
+                </div>
+                <div class="pastel-card p-4 rounded-2xl border-l-4 border-l-amber-400">
+                    <span class="text-xs font-semibold text-gray-500 uppercase">Pending Review</span>
+                    <p id="pendingReviewCount" class="font-display text-2xl font-bold text-amber-700">0</p>
+                </div>
+                <div class="pastel-card p-4 rounded-2xl border-l-4 border-l-pink-400">
+                    <span class="text-xs font-semibold text-gray-500 uppercase">Graded & Approved</span>
+                    <p id="approvedCount" class="font-display text-2xl font-bold text-pink-700">0</p>
+                </div>
+            </div>
+
+            <!-- Teacher Manage Class Prompts Panel with Essay Part Assignment -->
+            <div id="teacherPromptManager" class="pastel-card p-5 rounded-2xl border-2 border-purple-200">
+                <div class="flex flex-wrap justify-between items-center gap-2 mb-3">
+                    <h3 class="font-display font-bold text-purple-900 text-base flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-purple-600"></i> Teacher Assignment & Folder Manager
+                    </h3>
+                    <div class="flex items-center gap-2">
+                        <button onclick="resetDefaultClasses()" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 px-3 py-1.5 rounded-xl font-bold transition-colors flex items-center gap-1">
+                            <i class="fa-solid fa-rotate-left"></i> Reset Classes
+                        </button>
+                        <span id="teacherOnlyBadge" class="text-xs bg-purple-100 text-purple-800 px-2.5 py-1.5 rounded-xl font-bold">
+                            Teacher Portal Controls
+                        </span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+                    <div class="md:col-span-3">
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Active Class Folder</label>
+                        <div class="flex gap-2">
+                            <select id="manageClassSelect" onchange="loadClassPromptToEdit()" class="w-full px-3 py-2 text-xs rounded-xl border border-pastel-lavender bg-white focus:outline-none font-semibold text-purple-900">
+                                <!-- Options dynamically rendered -->
+                            </select>
+                            <button onclick="promptCreateNewClass()" class="bg-pastel-mintDark hover:bg-teal-400 text-teal-950 font-bold px-3 py-2 rounded-xl text-xs transition-colors whitespace-nowrap">
+                                + Class
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Teacher Selects Essay Part Here -->
+                    <div class="md:col-span-3">
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Assign SPM Essay Part</label>
+                        <select id="manageEssayPartSelect" class="w-full px-3 py-2 text-xs rounded-xl border border-pastel-lavender bg-white focus:outline-none font-medium">
+                            <option value="Short Paragraph">Short Paragraph Practice (40 - 70 words)</option>
+                            <option value="Part 1">Part 1 - Short Text / Email (~80 words)</option>
+                            <option value="Part 2">Part 2 - Guided Writing (125 - 150 words)</option>
+                            <option value="Part 3">Part 3 - Extended Writing (200 - 250 words)</option>
+                        </select>
+                    </div>
+
+                    <div class="md:col-span-4">
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Assigned Question / Prompt Topic</label>
+                        <input type="text" id="managePromptInput" placeholder="Enter question for selected class..." class="w-full px-3 py-2 text-xs rounded-xl border border-pastel-lavender bg-white focus:outline-none">
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="md:col-span-2 flex gap-2">
+                        <button onclick="saveClassPromptSetting()" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold px-3 py-2 rounded-xl text-xs transition-colors shadow-xs flex items-center justify-center gap-1">
+                            <i class="fa-solid fa-floppy-disk"></i> Save
+                        </button>
+                        <button onclick="deleteSelectedClass()" class="bg-rose-500 hover:bg-rose-600 text-white font-bold px-3 py-2 rounded-xl text-xs transition-colors shadow-xs flex items-center justify-center">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search and Sort Controls -->
+            <div class="pastel-card p-4 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="relative w-full md:w-80">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-purple-300"></i>
+                    <input type="text" id="searchInput" oninput="renderEssaysList()" placeholder="Search student name or text..." class="w-full pl-10 pr-4 py-2 rounded-xl border border-pastel-lavender focus:outline-none focus:border-purple-400 text-sm bg-white">
+                </div>
+                <div class="flex items-center gap-3 w-full md:w-auto justify-end">
+                    <select id="partFilter" onchange="renderEssaysList()" class="px-3 py-2 rounded-xl border border-pastel-lavender text-sm bg-white focus:outline-none">
+                        <option value="All">All Essay Parts</option>
+                        <option value="Short Paragraph">Short Paragraph</option>
+                        <option value="Part 1">Part 1</option>
+                        <option value="Part 2">Part 2</option>
+                        <option value="Part 3">Part 3</option>
+                    </select>
+                    <select id="sortBy" onchange="renderEssaysList()" class="px-3 py-2 rounded-xl border border-pastel-lavender text-sm bg-white focus:outline-none">
+                        <option value="newest">Newest First</option>
+                        <option value="highest">Highest Marks</option>
+                        <option value="lowest">Lowest Marks</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Essay List Grid -->
+            <div id="essaysGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Dynamic Essay Cards populated by JS -->
+            </div>
+        </section>
+
+        <!-- TAB 3: Class Analytics -->
+        <section id="tab-analytics" class="tab-content hidden space-y-6">
+            <div class="text-center max-w-2xl mx-auto">
+                <h2 class="font-display text-3xl font-bold text-purple-900">Performance Analytics</h2>
+                <p class="text-gray-600">Visualizing SPM 1119 Assessment scores across all rubric domains.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Radar Chart for Rubric Criteria -->
+                <div class="pastel-card rounded-3xl p-6 shadow-sm">
+                    <h3 class="font-display font-bold text-lg text-purple-900 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-radar text-purple-500"></i> Class Rubric Mastery (Average out of 5)
+                    </h3>
+                    <div class="relative h-64">
+                        <canvas id="rubricRadarChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Grade Distribution Bar Chart -->
+                <div class="pastel-card rounded-3xl p-6 shadow-sm">
+                    <h3 class="font-display font-bold text-lg text-purple-900 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-column text-teal-500"></i> Grade Band Distribution
+                    </h3>
+                    <div class="relative h-64">
+                        <canvas id="gradeBarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-12 py-6 bg-white/60 border-t border-pastel-lavender text-center text-xs text-gray-500">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <p>✨ SPM English 1119 CEFR Assessment Suite &bull; KSSM Standard Guidelines</p>
+            <p class="text-purple-600 font-semibold">Cute Pastel Edition 🌸</p>
+        </div>
+    </footer>
+
+    <!-- MODAL 1: Teacher Security Passcode Modal (No code displayed) -->
+    <div id="passcodeModal" class="fixed inset-0 bg-purple-950/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="pastel-card bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border-2 border-pastel-lavender">
+            <div class="text-center">
+                <div class="w-16 h-16 rounded-3xl bg-pastel-lavender text-purple-700 flex items-center justify-center text-2xl mx-auto mb-3">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <h3 class="font-display font-bold text-2xl text-purple-900">Teacher Access</h3>
+                <p class="text-xs text-gray-500 mt-1 mb-4">Enter security passcode to unlock teacher controls and official grading.</p>
+            </div>
+
+            <form onsubmit="verifyTeacherPasscode(event)" class="space-y-4">
+                <div>
+                    <input type="password" id="passcodeInput" placeholder="Enter Security Passcode" required class="w-full text-center text-xl tracking-widest px-4 py-3 rounded-2xl border-2 border-pastel-lavender focus:border-purple-500 focus:outline-none">
+                </div>
+                <div id="passcodeError" class="text-xs text-red-500 text-center hidden">
+                    <i class="fa-solid fa-circle-xmark"></i> Incorrect security code! Access denied.
+                </div>
+                <div class="flex gap-2">
+                    <button type="button" onclick="toggleTeacherPortalModal()" class="w-1/2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 rounded-xl text-sm transition-all">
+                        Cancel
+                    </button>
+                    <button type="submit" class="w-1/2 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2.5 rounded-xl text-sm transition-all shadow-sm">
+                        Unlock Portal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: Teacher Review & Grading Modal -->
+    <div id="reviewModal" class="fixed inset-0 bg-purple-950/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="pastel-card bg-white rounded-3xl max-w-4xl w-full p-6 lg:p-8 shadow-2xl my-8 max-h-[90vh] overflow-y-auto border-2 border-pastel-lavender">
+            <div class="flex justify-between items-start border-b border-pastel-lavender pb-4 mb-4">
+                <div>
+                    <span id="reviewPartBadge" class="bg-purple-100 text-purple-800 text-xs font-bold px-3 py-1 rounded-full">Part 3</span>
+                    <h3 id="reviewStudentName" class="font-display font-bold text-2xl text-purple-900 mt-1">Nur Aisyah Binti Ahmad</h3>
+                    <p class="text-xs text-gray-500 mt-0.5">Class: <span id="reviewClass" class="font-semibold text-gray-800">5 Murni</span></p>
+                </div>
+                <button onclick="closeReviewModal()" class="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Essay Text & AI Analysis -->
+                <div class="lg:col-span-7 bg-pastel-bg p-5 rounded-2xl border border-pastel-lavender space-y-4">
+                    <div class="flex justify-between items-center text-xs text-gray-500 font-semibold border-b border-purple-100 pb-2">
+                        <span>Submitted Essay Text</span>
+                        <span id="reviewWordCount" class="text-purple-700">215 words</span>
+                    </div>
+                    <div id="reviewEssayBody" class="text-sm leading-relaxed whitespace-pre-wrap font-body text-gray-800 max-h-80 overflow-y-auto pr-2">
+                        <!-- Content inserted via JS -->
+                    </div>
+
+                    <!-- AI Detector Report inside Review Modal -->
+                    <div class="pt-3 border-t border-purple-100">
+                        <div class="flex justify-between items-center mb-1 text-xs">
+                            <span class="font-bold text-purple-900"><i class="fa-solid fa-robot text-purple-500"></i> AI Authenticity Scan:</span>
+                            <span id="modalAiPercentText" class="font-bold text-purple-700">0% AI</span>
+                        </div>
+                        <div class="w-full bg-gray-200 h-2.5 rounded-full overflow-hidden">
+                            <div id="modalAiGaugeBar" class="h-full rounded-full transition-all duration-300 bg-emerald-400" style="width: 0%"></div>
+                        </div>
+                        <p id="modalAiVerdictText" class="text-[11px] text-gray-600 mt-1 italic">
+                            Human Heart & Soul 💖 (Authentic student writing detected)
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Grading Controls -->
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="bg-white p-4 rounded-2xl border border-pastel-lavender shadow-2xs space-y-4">
+                        <h4 class="font-display font-bold text-purple-900 flex items-center justify-between">
+                            <span>Official SPM Rubrics Evaluation</span>
+                            <span id="teacherTotalScore" class="text-lg text-purple-600">18 / 20</span>
+                        </h4>
+
+                        <!-- Rubric Controls -->
+                        <div class="space-y-3">
+                            <div>
+                                <div class="flex justify-between text-xs font-bold text-gray-700 mb-1">
+                                    <span>Content (C): <span id="valC" class="text-purple-600">4</span>/5</span>
+                                </div>
+                                <input type="range" id="sliderC" min="0" max="5" step="1" oninput="updateTeacherSliders()" class="w-full accent-purple-600">
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs font-bold text-gray-700 mb-1">
+                                    <span>Communicative Achievement (CA): <span id="valCA" class="text-purple-600">5</span>/5</span>
+                                </div>
+                                <input type="range" id="sliderCA" min="0" max="5" step="1" oninput="updateTeacherSliders()" class="w-full accent-purple-600">
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs font-bold text-gray-700 mb-1">
+                                    <span>Organisation (O): <span id="valO" class="text-purple-600">4</span>/5</span>
+                                </div>
+                                <input type="range" id="sliderO" min="0" max="5" step="1" oninput="updateTeacherSliders()" class="w-full accent-purple-600">
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs font-bold text-gray-700 mb-1">
+                                    <span>Language (L): <span id="valL" class="text-purple-600">5</span>/5</span>
+                                </div>
+                                <input type="range" id="sliderL" min="0" max="5" step="1" oninput="updateTeacherSliders()" class="w-full accent-purple-600">
+                            </div>
+                        </div>
+
+                        <!-- Quick Comment Bank -->
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1.5">Quick Feedback Tags ✨</label>
+                            <div class="flex flex-wrap gap-1.5">
+                                <button type="button" onclick="addTagToFeedback('✨ Excellent cohesive devices')" class="text-[11px] bg-purple-50 hover:bg-purple-100 text-purple-800 px-2.5 py-1 rounded-lg border border-purple-200 transition-colors">✨ Cohesive Devices</button>
+                                <button type="button" onclick="addTagToFeedback('🌸 Rich vocabulary used')" class="text-[11px] bg-pink-50 hover:bg-pink-100 text-pink-800 px-2.5 py-1 rounded-lg border border-pink-200 transition-colors">🌸 Rich Vocabulary</button>
+                                <button type="button" onclick="addTagToFeedback('⚠️ Watch paragraphing structure')" class="text-[11px] bg-amber-50 hover:bg-amber-100 text-amber-800 px-2.5 py-1 rounded-lg border border-amber-200 transition-colors">⚠️ Paragraphing</button>
+                                <button type="button" onclick="addTagToFeedback('📝 Minor tense consistency slips')" class="text-[11px] bg-blue-50 hover:bg-blue-100 text-blue-800 px-2.5 py-1 rounded-lg border border-blue-200 transition-colors">📝 Tense Slips</button>
+                                <button type="button" onclick="addTagToFeedback('💡 Well articulated topic sentences')" class="text-[11px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-lg border border-emerald-200 transition-colors">💡 Topic Sentences</button>
+                            </div>
+                        </div>
+
+                        <!-- Custom Feedback Textarea -->
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">Teacher Remarks / Guidance</label>
+                            <textarea id="teacherFeedbackText" rows="3" placeholder="Enter personalized feedback for student..." class="w-full p-2.5 text-xs rounded-xl border border-pastel-lavender focus:outline-none focus:border-purple-400 bg-white"></textarea>
+                        </div>
+
+                        <div class="pt-2 flex flex-col gap-2">
+                            <button onclick="saveTeacherEvaluation()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 rounded-xl text-sm transition-all shadow-sm flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-circle-check"></i> Save & Approve Official Mark
+                            </button>
+                            <div class="flex gap-2">
+                                <button onclick="printStudentReportCard()" class="w-1/2 bg-pastel-lavender hover:bg-purple-200 text-purple-900 font-semibold py-2 rounded-xl text-xs transition-all flex items-center justify-center gap-1">
+                                    <i class="fa-solid fa-print"></i> Print Report Card
+                                </button>
+                                <button onclick="deleteCurrentEssay()" class="w-1/2 bg-red-50 hover:bg-red-100 text-red-600 font-semibold py-2 rounded-xl text-xs transition-all flex items-center justify-center gap-1">
+                                    <i class="fa-solid fa-trash"></i> Delete Entry
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRINTABLE REPORT CARD CONTAINER -->
+    <div id="printableReport" class="hidden p-8 bg-white max-w-3xl mx-auto">
+        <div class="border-4 border-purple-200 p-8 rounded-3xl space-y-6">
+            <div class="text-center border-b border-purple-100 pb-4">
+                <h1 class="font-display font-bold text-3xl text-purple-900">✨ SPM English 1119 Evaluation Report ✨</h1>
+                <p class="text-sm text-gray-600 mt-1">KSSM CEFR Assessment Rubrics Standard &bull; Official Marksheet</p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 text-sm bg-purple-50 p-4 rounded-2xl">
+                <div><strong>Student Name:</strong> <span id="printName">--</span></div>
+                <div><strong>Class:</strong> <span id="printClass">--</span></div>
+                <div><strong>Essay Part:</strong> <span id="printPart">--</span></div>
+                <div><strong>AI Score:</strong> <span id="printAiScore">--</span></div>
+            </div>
+
+            <div class="border border-purple-200 rounded-2xl p-4">
+                <h3 class="font-bold text-purple-900 border-b border-purple-100 pb-2 mb-3">Scores Breakdown</h3>
+                <div class="grid grid-cols-2 gap-3 text-sm">
+                    <div>Content (C): <strong id="printC" class="text-purple-700">0/5</strong></div>
+                    <div>Communicative Achievement (CA): <strong id="printCA" class="text-purple-700">0/5</strong></div>
+                    <div>Organisation (O): <strong id="printO" class="text-purple-700">0/5</strong></div>
+                    <div>Language (L): <strong id="printL" class="text-purple-700">0/5</strong></div>
+                </div>
+                <div class="mt-4 pt-3 border-t border-purple-100 flex justify-between items-center">
+                    <span class="font-bold text-gray-700">Total Raw Score: <span id="printTotal" class="text-purple-900 font-extrabold text-lg">0 / 20</span></span>
+                    <span id="printGrade" class="bg-purple-600 text-white font-bold px-3 py-1 rounded-xl">Band --</span>
+                </div>
+            </div>
+
+            <div class="border border-purple-200 rounded-2xl p-4">
+                <h3 class="font-bold text-purple-900 border-b border-purple-100 pb-2 mb-2">Teacher Remarks & Guidance</h3>
+                <p id="printRemarks" class="text-sm text-gray-700 italic">No remarks provided.</p>
+            </div>
+
+            <div class="pt-8 flex justify-between items-end text-xs text-gray-500">
+                <div>
+                    <p>Evaluated on: <span id="printDate">--</span></p>
+                </div>
+                <div class="text-center border-t border-gray-300 pt-2 px-8">
+                    <p class="font-bold text-gray-700">Teacher Signature</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global App State & LocalStorage Management
+        let isTeacherUnlocked = false;
+        let selectedClassFilter = 'All';
+        let currentReviewId = null;
+        let radarChartInstance = null;
+        let gradeChartInstance = null;
+
+        // Common Grammar / Spelling / Syntax Error Rules for Malaysian SPM Students
+        const grammarRules = [
+            { pattern: /\bshe go\b/gi, err: "she go", fix: "she goes", cat: "Subject-Verb Agreement", exp: "Use singular verb 'goes' with singular pronoun 'she'." },
+            { pattern: /\bhe go\b/gi, err: "he go", fix: "he goes", cat: "Subject-Verb Agreement", exp: "Use singular verb 'goes' with singular pronoun 'he'." },
+            { pattern: /\bthey goes\b/gi, err: "they goes", fix: "they go", cat: "Subject-Verb Agreement", exp: "Use plural verb 'go' with plural pronoun 'they'." },
+            { pattern: /\bi is\b/gi, err: "i is", fix: "I am", cat: "Subject-Verb Agreement", exp: "The pronoun 'I' pairs with 'am', not 'is'." },
+            { pattern: /\balot\b/gi, err: "alot", fix: "a lot", cat: "Spelling Error", exp: "'A lot' should be written as two separate words." },
+            { pattern: /\brecieve\b/gi, err: "recieve", fix: "receive", cat: "Spelling Error", exp: "Rule 'I before E except after C' -> receive." },
+            { pattern: /\bseperate\b/gi, err: "seperate", fix: "separate", cat: "Spelling Error", exp: "Correct spelling contains 'par' -> separate." },
+            { pattern: /\bbecause of he\b/gi, err: "because of he", fix: "because of him", cat: "Pronoun Usage", exp: "Use object pronoun 'him' after prepositions." },
+            { pattern: /\bmore better\b/gi, err: "more better", fix: "much better", cat: "Double Comparative", exp: "'Better' is already comparative; do not double with 'more'." },
+            { pattern: /\bdiscuss about\b/gi, err: "discuss about", fix: "discuss", cat: "Redundancy / Preposition", exp: "'Discuss' already means 'talk about'." },
+            { pattern: /\byesterday i go\b/gi, err: "yesterday i go", fix: "yesterday I went", cat: "Past Tense Consistency", exp: "Use past tense 'went' for past time markers like 'yesterday'." },
+            { pattern: /\blast week she visit\b/gi, err: "last week she visit", fix: "last week she visited", cat: "Past Tense Consistency", exp: "Use past form 'visited' for past event." },
+            { pattern: /\bi am agree\b/gi, err: "i am agree", fix: "I agree", cat: "Verb Form Slips", exp: "'Agree' is a verb; say 'I agree' instead of 'I am agree'." },
+            { pattern: /\bevery students\b/gi, err: "every students", fix: "every student", cat: "Determiner Agreement", exp: "'Every' is followed by a singular noun." },
+            { pattern: /\bno body\b/gi, err: "no body", fix: "nobody", cat: "Spelling Error", exp: "'Nobody' is written as a single word." }
+        ];
+
+        // Default Class Assignment Map with Part & Prompts
+        const defaultClassAssignments = {
+            '5 Murni': {
+                part: 'Part 3',
+                prompt: 'Extended Writing: Write an essay about a memorable family holiday that taught you a valuable life lesson.'
+            },
+            '5 Cemerlang': {
+                part: 'Part 2',
+                prompt: 'Guided Writing: Write an article for your school magazine discussing the pros and cons of online shopping for teenagers.'
+            },
+            '5 Bijak': {
+                part: 'Short Paragraph',
+                prompt: 'Short Paragraph Practice: Write a focused 50-word paragraph explaining one effective method to save electricity at home.'
+            },
+            '5 Setia': {
+                part: 'Part 1',
+                prompt: 'Short Text / Email: Write an email inviting your friend to attend a school science fair next Friday and describe two main activities.'
+            }
+        };
+
+        // Initial Pre-loaded Sample Essays
+        const initialSampleEssays = [
+            {
+                id: 'sample-1',
+                studentName: 'Nur Aisyah Binti Ahmad',
+                className: '5 Murni',
+                essayPart: 'Part 3',
+                essayTitle: 'Family Holiday Adventure',
+                essayBody: `The velvety night sky was peppered with twinkling stars as my family and I arrived at the rustic homestay in Kampung Sungai Kayu. We had been eagerly anticipating this weekend getaway for months. However, little did we know that an unforgettable adventure awaited us.
+
+Around midnight, a sudden deafening rumble shook the chalet. To our horror, the river behind our lodge had overflowed its banks because of heavy downpours. Murky floodwaters were rapidly encroaching upon our doorstep! Yesterday I go with my father to inspect the balcony.
+
+Fortunately, within forty-five agonizing minutes, a rescue motorboat arrived. They helped us descend safely into the boat one by one. It was a harrowing night, yet it taught me the priceless value of composure in times of crisis.`,
+                scores: { C: 5, CA: 5, O: 4, L: 4 },
+                totalScore: 18,
+                aiPercentage: 8,
+                status: 'Approved Grade',
+                teacherFeedback: '🌸 Rich vocabulary and sophisticated sentence structures used! Excellent narrative flow.',
+                date: '2026-10-08'
+            },
+            {
+                id: 'sample-2',
+                studentName: 'Kenji Tan Wei Lun',
+                className: '5 Cemerlang',
+                essayPart: 'Part 2',
+                essayTitle: 'Online Shopping Debate',
+                essayBody: `In recent years, e-commerce platforms like Shopee have transformed how teenagers buy goods. Every students in my class loves to order items online because it is convenient.
+
+I discuss about products with my friends before buying. Furthermore, recieve vouchers makes online shopping more better than traditional retail shops in malls.
+
+In conclusion, I agree that online shopping offers great advantages for students.`,
+                scores: { C: 4, CA: 4, O: 4, L: 3 },
+                totalScore: 15,
+                aiPercentage: 18,
+                status: 'Approved Grade',
+                teacherFeedback: '✨ Well structured paragraphs with balanced comparison points. Watch out for minor preposition and spelling slips!',
+                date: '2026-10-09'
+            }
+        ];
+
+        window.onload = function() {
+            if (!localStorage.getItem('spm_essays_data')) {
+                localStorage.setItem('spm_essays_data', JSON.stringify(initialSampleEssays));
+            }
+            if (!localStorage.getItem('spm_class_assignments')) {
+                localStorage.setItem('spm_class_assignments', JSON.stringify(defaultClassAssignments));
+            }
+
+            populateClassDropdowns();
+            onClassSelected();
+            evaluateEssayLive();
+            renderEssaysList();
+            initCharts();
+        };
+
+        // Data Storage Getters/Setters
+        function getEssays() {
+            return JSON.parse(localStorage.getItem('spm_essays_data') || '[]');
+        }
+
+        function saveEssays(essays) {
+            localStorage.setItem('spm_essays_data', JSON.stringify(essays));
+            renderEssaysList();
+            updateCharts();
+        }
+
+        function getClassAssignments() {
+            return JSON.parse(localStorage.getItem('spm_class_assignments') || '{}');
+        }
+
+        function saveClassAssignments(assignments) {
+            localStorage.setItem('spm_class_assignments', JSON.stringify(assignments));
+            populateClassDropdowns();
+            onClassSelected();
+        }
+
+        function populateClassDropdowns() {
+            const assignments = getClassAssignments();
+            const classes = Object.keys(assignments);
+
+            const studentClassSelect = document.getElementById('studentClass');
+            const currentStudentVal = studentClassSelect.value;
+            if (classes.length > 0) {
+                studentClassSelect.innerHTML = classes.map(c => `<option value="${c}">${c}</option>`).join('');
+                if (classes.includes(currentStudentVal)) {
+                    studentClassSelect.value = currentStudentVal;
+                } else {
+                    studentClassSelect.value = classes[0];
+                }
+            } else {
+                studentClassSelect.innerHTML = '<option value="">No Classes Available - Add One</option>';
+            }
+
+            const manageClassSelect = document.getElementById('manageClassSelect');
+            if (classes.length > 0) {
+                manageClassSelect.innerHTML = classes.map(c => `<option value="${c}">${c}</option>`).join('');
+            } else {
+                manageClassSelect.innerHTML = '<option value="">None</option>';
+            }
+
+            const filterContainer = document.getElementById('classFilterContainer');
+            if (selectedClassFilter !== 'All' && !classes.includes(selectedClassFilter)) {
+                selectedClassFilter = 'All';
+            }
+
+            let filterHtml = `
+                <button onclick="filterClass('All')" class="class-filter-btn ${selectedClassFilter === 'All' ? 'active bg-purple-600 text-white' : 'bg-white text-purple-900 border border-pastel-lavender'} font-semibold px-4 py-2 rounded-xl text-sm transition-all shadow-2xs">
+                    All Classes
+                </button>
+            `;
+            classes.forEach(c => {
+                const isActive = selectedClassFilter === c;
+                filterHtml += `
+                    <button onclick="filterClass('${c}')" class="class-filter-btn ${isActive ? 'active bg-purple-600 text-white' : 'bg-white hover:bg-pastel-lavender text-purple-900 border border-pastel-lavender'} font-semibold px-4 py-2 rounded-xl text-sm transition-all">
+                        ${c}
+                    </button>
+                `;
+            });
+            filterContainer.innerHTML = filterHtml;
+
+            loadClassPromptToEdit();
+        }
+
+        function onClassSelected() {
+            const selectedClass = document.getElementById('studentClass').value;
+            const assignments = getClassAssignments();
+
+            if (selectedClass && assignments[selectedClass]) {
+                const task = assignments[selectedClass];
+                document.getElementById('assignedQuestionText').innerText = `"${task.prompt}"`;
+                document.getElementById('assignedPartBadge').innerText = formatPartBadgeText(task.part);
+            } else {
+                document.getElementById('assignedQuestionText').innerText = 'Select your class to load prompt.';
+                document.getElementById('assignedPartBadge').innerText = 'No Part Assigned';
+            }
+            evaluateEssayLive();
+        }
+
+        function formatPartBadgeText(partKey) {
+            if (partKey === 'Part 1') return 'Part 1 - Short Text / Email';
+            if (partKey === 'Part 2') return 'Part 2 - Guided Writing';
+            if (partKey === 'Part 3') return 'Part 3 - Extended Writing';
+            if (partKey === 'Short Paragraph') return 'Short Paragraph Practice';
+            return partKey;
+        }
+
+        function loadClassPromptToEdit() {
+            const selectedClass = document.getElementById('manageClassSelect').value;
+            const assignments = getClassAssignments();
+            if (selectedClass && assignments[selectedClass]) {
+                document.getElementById('managePromptInput').value = assignments[selectedClass].prompt;
+                document.getElementById('manageEssayPartSelect').value = assignments[selectedClass].part || 'Part 3';
+            } else {
+                document.getElementById('managePromptInput').value = '';
+            }
+        }
+
+        function saveClassPromptSetting() {
+            if (!isTeacherUnlocked) {
+                alert('🔒 Please unlock Teacher Portal first!');
+                toggleTeacherPortalModal();
+                return;
+            }
+
+            const selectedClass = document.getElementById('manageClassSelect').value;
+            if (!selectedClass) return alert('Select or create a class first!');
+
+            const newPrompt = document.getElementById('managePromptInput').value.trim();
+            const newPart = document.getElementById('manageEssayPartSelect').value;
+
+            if (!newPrompt) return alert('Enter a valid task prompt.');
+
+            const assignments = getClassAssignments();
+            assignments[selectedClass] = { part: newPart, prompt: newPrompt };
+            saveClassAssignments(assignments);
+            alert(`✅ Task updated for ${selectedClass}!`);
+        }
+
+        function promptCreateNewClass() {
+            if (!isTeacherUnlocked) {
+                alert('🔒 Please unlock Teacher Portal first!');
+                toggleTeacherPortalModal();
+                return;
+            }
+
+            const name = prompt('Enter new class name (e.g., 5 Alpha):');
+            if (name && name.trim()) {
+                const className = name.trim();
+                const assignments = getClassAssignments();
+                if (assignments[className]) return alert('Class already exists!');
+                assignments[className] = {
+                    part: 'Part 3',
+                    prompt: 'Extended Writing: Write about your main goals for SPM.'
+                };
+                saveClassAssignments(assignments);
+                document.getElementById('studentClass').value = className;
+                document.getElementById('manageClassSelect').value = className;
+                loadClassPromptToEdit();
+                alert(`✨ Class "${className}" created successfully!`);
+            }
+        }
+
+        function deleteSelectedClass() {
+            if (!isTeacherUnlocked) {
+                alert('🔒 Please unlock Teacher Portal first!');
+                toggleTeacherPortalModal();
+                return;
+            }
+
+            const selectedClass = document.getElementById('manageClassSelect').value;
+            if (!selectedClass) return alert('No class selected!');
+
+            if (confirm(`Delete class "${selectedClass}"?`)) {
+                const assignments = getClassAssignments();
+                delete assignments[selectedClass];
+                saveClassAssignments(assignments);
+                alert(`🗑️ Class "${selectedClass}" deleted!`);
+                renderEssaysList();
+            }
+        }
+
+        function resetDefaultClasses() {
+            if (!isTeacherUnlocked) {
+                alert('🔒 Please unlock Teacher Portal first!');
+                toggleTeacherPortalModal();
+                return;
+            }
+
+            if (confirm('Reset to default sample classes?')) {
+                saveClassAssignments(defaultClassAssignments);
+                alert('✨ Default classes restored!');
+            }
+        }
+
+        function evaluateEssayLive() {
+            const body = document.getElementById('essayBody').value;
+            const selectedClass = document.getElementById('studentClass').value;
+            const assignments = getClassAssignments();
+            
+            let part = 'Part 3';
+            if (selectedClass && assignments[selectedClass]) {
+                part = assignments[selectedClass].part;
+            }
+
+            const words = body.trim() ? body.trim().split(/\s+/).length : 0;
+            document.getElementById('wordCountBadge').innerText = `Words: ${words}`;
+
+            let minWords = 40, maxWords = 70;
+            if (part === 'Part 1') { minWords = 70; maxWords = 95; }
+            else if (part === 'Part 2') { minWords = 125; maxWords = 150; }
+            else if (part === 'Part 3') { minWords = 200; maxWords = 250; }
+
+            const warning = document.getElementById('wordCountWarning');
+            if (words > 0 && (words < minWords - 10 || words > maxWords + 35)) {
+                warning.classList.remove('hidden');
+            } else {
+                warning.classList.add('hidden');
+            }
+
+            let scoreC = 2, scoreCA = 2, scoreO = 2, scoreL = 2;
+            const tips = [];
+
+            if (words >= minWords) {
+                scoreC += 2;
+                tips.push('Appropriate response length for ' + part + '!');
+            } else if (words > 20) {
+                scoreC += 1;
+                tips.push('Expand response further to address all prompt points.');
+            } else {
+                tips.push('Write more to build a complete response.');
+            }
+
+            const paragraphs = body.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+            if (part === 'Short Paragraph') {
+                if (paragraphs.length === 1 && words >= 35) {
+                    scoreO += 3;
+                    tips.push('Great single-paragraph focus!');
+                }
+            } else {
+                if (paragraphs.length >= 3) {
+                    scoreO += 2;
+                    tips.push('Clear paragraph structure!');
+                } else if (paragraphs.length === 2) {
+                    scoreO += 1;
+                }
+            }
+
+            const cohesiveWords = ['however', 'therefore', 'furthermore', 'moreover', 'in conclusion', 'firstly', 'on the other hand', 'besides', 'fortunately', 'subsequently', 'nevertheless'];
+            let cohesiveCount = 0;
+            cohesiveWords.forEach(w => {
+                if (body.toLowerCase().includes(w)) cohesiveCount++;
+            });
+
+            if (cohesiveCount >= 2) {
+                scoreCA += 2; scoreL += 1;
+                tips.push('Effective usage of cohesive connectors!');
+            } else if (cohesiveCount >= 1) {
+                scoreCA += 1;
+            }
+
+            scoreC = Math.min(5, Math.max(1, scoreC));
+            scoreCA = Math.min(5, Math.max(1, scoreCA));
+            scoreO = Math.min(5, Math.max(1, scoreO));
+            scoreL = Math.min(5, Math.max(1, scoreL));
+
+            if (words === 0) {
+                scoreC = 0; scoreCA = 0; scoreO = 0; scoreL = 0;
+            }
+
+            const total = scoreC + scoreCA + scoreO + scoreL;
+            const scaled = (total / 20) * 40;
+
+            document.getElementById('preMarkDisplay').innerText = `${total} / 20`;
+            document.getElementById('scaledMarkDisplay').innerText = `Scaled Score: ${scaled.toFixed(0)} / 40 marks`;
+
+            document.getElementById('scoreC').innerText = `${scoreC} / 5`;
+            document.getElementById('barC').style.width = `${(scoreC / 5) * 100}%`;
+
+            document.getElementById('scoreCA').innerText = `${scoreCA} / 5`;
+            document.getElementById('barCA').style.width = `${(scoreCA / 5) * 100}%`;
+
+            document.getElementById('scoreO').innerText = `${scoreO} / 5`;
+            document.getElementById('barO').style.width = `${(scoreO / 5) * 100}%`;
+
+            document.getElementById('scoreL').innerText = `${scoreL} / 5`;
+            document.getElementById('barL').style.width = `${(scoreL / 5) * 100}%`;
+
+            const gradeBadge = document.getElementById('preGradeBadge');
+            const band = getBandGrade(total);
+            gradeBadge.innerText = band.label;
+            gradeBadge.className = `font-bold px-3 py-1 rounded-xl text-sm shadow-2xs ${band.color}`;
+
+            // Calculate & Render Big Speedometer AI Gauge
+            const aiScore = calculateAILikelihood(body);
+            updateBigAiSpeedometer(aiScore);
+
+            const feedbackList = document.getElementById('feedbackList');
+            feedbackList.innerHTML = tips.map(tip => `<li class="flex items-start gap-1.5"><i class="fa-solid fa-sparkles text-amber-400 mt-0.5"></i> ${tip}</li>`).join('');
+        }
+
+        function calculateAILikelihood(text) {
+            if (!text || text.trim().length < 30) return 0;
+
+            let score = 0;
+            const lower = text.toLowerCase();
+            
+            const aiPhrases = [
+                'in today\'s world', 'delve into', 'testament to', 'unprecedented era', 
+                'it is important to note', 'pivotal role', 'in conclusion, it is evident',
+                'furthermore, it is crucial', 'fosters a sense of', 'beacon of hope'
+            ];
+            
+            let phraseMatches = 0;
+            aiPhrases.forEach(p => {
+                if (lower.includes(p)) phraseMatches++;
+            });
+            score += phraseMatches * 18;
+
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+            if (sentences.length >= 3) {
+                const lengths = sentences.map(s => s.trim().split(/\s+/).length);
+                const avg = lengths.reduce((a,b) => a + b, 0) / lengths.length;
+                const variance = lengths.reduce((a,b) => a + Math.pow(b - avg, 2), 0) / lengths.length;
+                
+                if (variance < 8 && avg > 14) {
+                    score += 25;
+                }
+            }
+
+            const formalNoContraction = (lower.match(/\b(it is|cannot|do not|will not|they are|we have)\b/g) || []).length;
+            const naturalContractions = (lower.match(/\b(it's|can't|don't|won't|they're|we've)\b/g) || []).length;
+            
+            if (formalNoContraction > 4 && naturalContractions === 0) {
+                score += 20;
+            }
+
+            return Math.min(99, Math.max(3, Math.round(score)));
+        }
+
+        // BIG SPEEDOMETER AI GAUGE METER ANIMATION
+        function updateBigAiSpeedometer(percent) {
+            const bigText = document.getElementById('aiPercentBigText');
+            bigText.innerText = `${percent}% AI`;
+
+            // Animate arc dashoffset (251.2 total circumference)
+            const strokeDashoffset = 251.2 - (251.2 * (percent / 100));
+            document.getElementById('speedometerArc').style.strokeDashoffset = strokeDashoffset;
+
+            // Rotate Needle: -90deg is 0%, +90deg is 100%
+            const angle = -90 + (180 * (percent / 100));
+            document.getElementById('needleGroup').style.transform = `rotate(${angle}deg)`;
+
+            const verdictBadge = document.getElementById('aiVerdictBigBadge');
+            if (percent >= 70) {
+                bigText.className = 'text-base font-extrabold text-red-600';
+                verdictBadge.innerText = 'High AI Probability 🚨';
+                verdictBadge.className = 'font-display font-bold text-xs md:text-sm px-4 py-1 rounded-full bg-red-100 text-red-800 shadow-2xs';
+            } else if (percent >= 38) {
+                bigText.className = 'text-base font-extrabold text-amber-600';
+                verdictBadge.innerText = 'Mixed AI Assistance 🤖';
+                verdictBadge.className = 'font-display font-bold text-xs md:text-sm px-4 py-1 rounded-full bg-amber-100 text-amber-800 shadow-2xs';
+            } else {
+                bigText.className = 'text-base font-extrabold text-emerald-600';
+                verdictBadge.innerText = 'Human Heart & Soul 💖';
+                verdictBadge.className = 'font-display font-bold text-xs md:text-sm px-4 py-1 rounded-full bg-emerald-100 text-emerald-800 shadow-2xs';
+            }
+        }
+
+        // RED ANNOTATION ENGINE - Generates inline red strikethroughs & green corrections
+        function generateRedAnnotations(text) {
+            let annotatedText = escapeHtml(text);
+            const detectedErrors = [];
+
+            grammarRules.forEach(rule => {
+                const matches = [...text.matchAll(rule.pattern)];
+                matches.forEach(m => {
+                    const matchedStr = m[0];
+                    detectedErrors.push({
+                        err: matchedStr,
+                        fix: rule.fix,
+                        cat: rule.cat,
+                        exp: rule.exp
+                    });
+
+                    // Replace in HTML with red inline annotation
+                    const replacementHtml = `<span class="inline-flex items-center gap-1 bg-red-50 text-red-700 border border-red-200 px-1.5 py-0.5 rounded-md font-bold my-0.5"><line-through class="line-through decoration-red-500 text-red-600">${escapeHtml(matchedStr)}</line-through> <i class="fa-solid fa-arrow-right text-[10px] text-gray-400"></i> <span class="text-emerald-700 bg-emerald-100 px-1 rounded">${rule.fix}</span></span>`;
+                    
+                    const regex = new RegExp(`\\b${escapeRegExp(matchedStr)}\\b`, 'g');
+                    annotatedText = annotatedText.replace(regex, replacementHtml);
+                });
+            });
+
+            return { annotatedText, detectedErrors };
+        }
+
+        function escapeRegExp(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function getBandGrade(mark) {
+            if (mark >= 18) return { label: 'Band 5 (A+)', color: 'bg-emerald-500 text-white' };
+            if (mark >= 15) return { label: 'Band 4 (A)', color: 'bg-teal-500 text-white' };
+            if (mark >= 12) return { label: 'Band 3 (B+)', color: 'bg-blue-500 text-white' };
+            if (mark >= 9)  return { label: 'Band 2 (C)', color: 'bg-amber-500 text-white' };
+            if (mark >= 5)  return { label: 'Band 1 (D/E)', color: 'bg-orange-500 text-white' };
+            return { label: 'Band 0 (G)', color: 'bg-gray-400 text-white' };
+        }
+
+        function handleEssaySubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('studentName').value;
+            const className = document.getElementById('studentClass').value;
+            const body = document.getElementById('essayBody').value;
+
+            if (!className) {
+                alert('Please select a valid class! Ask teacher to add a class if none exist.');
+                return;
+            }
+
+            const assignments = getClassAssignments();
+            const taskPrompt = (className && assignments[className]) ? assignments[className].prompt : 'Assigned SPM Essay Task';
+            const part = (className && assignments[className]) ? assignments[className].part : 'Part 3';
+
+            // Auto title generated from assigned prompt
+            const autoTitle = taskPrompt.length > 35 ? taskPrompt.substring(0, 35) + '...' : taskPrompt;
+
+            const words = body.trim().split(/\s+/).length;
+            const scoreC = Math.min(5, Math.max(2, Math.floor(words / 40)));
+            const scoreCA = Math.min(5, Math.max(2, Math.floor(words / 45)));
+            const scoreO = Math.min(5, Math.max(2, Math.floor(words / 50)));
+            const scoreL = Math.min(5, Math.max(2, Math.floor(words / 45)));
+            const total = scoreC + scoreCA + scoreO + scoreL;
+            const aiScore = calculateAILikelihood(body);
+
+            // Generate Red Annotations
+            const { annotatedText, detectedErrors } = generateRedAnnotations(body);
+
+            // Render Red Annotations immediately on student screen
+            const container = document.getElementById('annotationContainer');
+            container.classList.remove('hidden');
+            document.getElementById('annotatedTextDisplay').innerHTML = annotatedText;
+            document.getElementById('errorCountBadge').innerText = `${detectedErrors.length} Errors Found & Corrected`;
+
+            const breakdownList = document.getElementById('errorBreakdownList');
+            if (detectedErrors.length === 0) {
+                breakdownList.innerHTML = `<p class="text-xs text-emerald-700 bg-emerald-50 p-3 rounded-xl border border-emerald-200"><i class="fa-solid fa-circle-check"></i> Excellent work! No major common grammar or spelling errors were detected in your submission.</p>`;
+            } else {
+                breakdownList.innerHTML = detectedErrors.map(item => `
+                    <div class="p-3 bg-red-50/70 rounded-xl border border-rose-200 text-xs flex flex-col gap-1">
+                        <div class="flex items-center justify-between font-bold">
+                            <span class="text-rose-900"><span class="line-through text-red-600">${item.err}</span> ➔ <span class="text-emerald-700 font-extrabold bg-emerald-100 px-1.5 py-0.5 rounded">${item.fix}</span></span>
+                            <span class="bg-rose-200 text-rose-800 px-2 py-0.5 rounded-full text-[10px]">${item.cat}</span>
+                        </div>
+                        <p class="text-gray-600 italic">${item.exp}</p>
+                    </div>
+                `).join('');
+            }
+
+            const newEssay = {
+                id: 'essay-' + Date.now(),
+                studentName: name,
+                className: className,
+                essayPart: part,
+                essayTitle: autoTitle,
+                essayBody: body,
+                scores: { C: scoreC, CA: scoreCA, O: scoreO, L: scoreL },
+                totalScore: total,
+                aiPercentage: aiScore,
+                status: 'Pending Teacher Review',
+                teacherFeedback: 'Submitted for official teacher verification.',
+                date: new Date().toISOString().split('T')[0]
+            };
+
+            const essays = getEssays();
+            essays.unshift(newEssay);
+            saveEssays(essays);
+
+            // Scroll smoothly down to Red Annotations view
+            container.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function loadSamplePrompt() {
+            document.getElementById('studentName').value = 'Adam Harith Bin Razak';
+            const cls = document.getElementById('studentClass');
+            if (cls.options.length > 0) cls.selectedIndex = 0;
+            
+            document.getElementById('essayBody').value = `Yesterday i go with my family to Kampung Sungai Kayu for a weekend holiday. We had been eagerly anticipating this trip because of he invited us.
+
+Every students in our group was excited. However, I recieve news that a heavy storm was approaching. I am agree that we should stay inside our lodge. I discuss about safety plans with my father.
+
+Fortunately, local volunteers helped us evacuation safely. It was a memorable experience, and I learnt alot about staying calm.`;
+            onClassSelected();
+            evaluateEssayLive();
+        }
+
+        function filterClass(className) {
+            selectedClassFilter = className;
+            populateClassDropdowns();
+            renderEssaysList();
+        }
+
+        function renderEssaysList() {
+            let essays = getEssays();
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const part = document.getElementById('partFilter').value;
+            const sort = document.getElementById('sortBy').value;
+
+            document.getElementById('totalEssaysCount').innerText = essays.length;
+            const avg = essays.length > 0 ? (essays.reduce((acc, curr) => acc + curr.totalScore, 0) / essays.length).toFixed(1) : '0.0';
+            document.getElementById('classAvgMark').innerText = `${avg} / 20`;
+            document.getElementById('pendingReviewCount').innerText = essays.filter(e => e.status.includes('Pending')).length;
+            document.getElementById('approvedCount').innerText = essays.filter(e => e.status.includes('Approved')).length;
+
+            if (selectedClassFilter !== 'All') {
+                essays = essays.filter(e => e.className === selectedClassFilter);
+            }
+            if (part !== 'All') {
+                essays = essays.filter(e => e.essayPart === part);
+            }
+            if (search) {
+                essays = essays.filter(e => e.studentName.toLowerCase().includes(search) || e.essayBody.toLowerCase().includes(search));
+            }
+
+            if (sort === 'highest') {
+                essays.sort((a,b) => b.totalScore - a.totalScore);
+            } else if (sort === 'lowest') {
+                essays.sort((a,b) => a.totalScore - b.totalScore);
+            } else {
+                essays.sort((a,b) => new Date(b.date) - new Date(a.date));
+            }
+
+            const grid = document.getElementById('essaysGrid');
+            if (essays.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-gray-400 bg-white/60 rounded-3xl border-2 border-dashed border-pastel-lavender">
+                        <i class="fa-solid fa-folder-open text-4xl mb-2 text-purple-300"></i>
+                        <p class="font-medium">No essays found matching your criteria.</p>
+                    </div>`;
+                return;
+            }
+
+            grid.innerHTML = essays.map(item => {
+                const band = getBandGrade(item.totalScore);
+                const isApproved = item.status.includes('Approved');
+                const ai = item.aiPercentage || calculateAILikelihood(item.essayBody);
+                return `
+                    <div class="pastel-card rounded-3xl p-5 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between border-2 border-pastel-lavender">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-purple-100 text-purple-800">${item.essayPart}</span>
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded-full ${isApproved ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                                    <i class="fa-solid ${isApproved ? 'fa-check' : 'fa-clock'} mr-1"></i>${item.status}
+                                </span>
+                            </div>
+
+                            <h3 class="font-display font-bold text-base text-purple-950 line-clamp-1 mb-1">👤 ${escapeHtml(item.studentName)}</h3>
+                            <p class="text-xs text-purple-700 font-semibold mb-2">Class: ${item.className}</p>
+
+                            <p class="text-xs text-gray-500 line-clamp-3 leading-relaxed mb-3 font-body bg-purple-50/50 p-2.5 rounded-xl">
+                                "${escapeHtml(item.essayBody)}"
+                            </p>
+
+                            <div class="flex items-center justify-between text-[11px] px-2.5 py-1 rounded-lg bg-gray-50 border border-gray-100 mb-2">
+                                <span class="text-gray-500"><i class="fa-solid fa-gauge-high text-purple-500"></i> AI Scan:</span>
+                                <span class="font-bold ${ai > 50 ? 'text-red-600' : 'text-emerald-600'}">${ai}% AI</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center pt-2 border-t border-purple-100 text-xs">
+                                <div>
+                                    <span class="text-gray-500">Marks:</span>
+                                    <span class="font-bold text-purple-900 text-sm ml-1">${item.totalScore} / 20</span>
+                                </div>
+                                <span class="text-xs px-2 py-0.5 rounded-md font-bold ${band.color}">${band.label}</span>
+                            </div>
+
+                            <button onclick="openReviewModal('${item.id}')" class="mt-3 w-full bg-pastel-lavender hover:bg-purple-200 text-purple-900 font-bold py-2 rounded-xl text-xs transition-colors flex items-center justify-center gap-1.5">
+                                <i class="fa-solid ${isTeacherUnlocked ? 'fa-pen-to-square' : 'fa-eye'}"></i>
+                                ${isTeacherUnlocked ? 'Evaluate & Grade' : 'View Essay Detail'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-white', 'text-purple-900', 'shadow-sm');
+                btn.classList.add('text-gray-600');
+            });
+
+            const activeNav = document.getElementById('nav-' + tabId);
+            if (activeNav) {
+                activeNav.classList.add('bg-white', 'text-purple-900', 'shadow-sm');
+                activeNav.classList.remove('text-gray-600');
+            }
+
+            if (tabId === 'analytics') {
+                updateCharts();
+            }
+        }
+
+        function toggleTeacherPortalModal() {
+            const modal = document.getElementById('passcodeModal');
+            modal.classList.toggle('hidden');
+            document.getElementById('passcodeError').classList.add('hidden');
+            document.getElementById('passcodeInput').value = '';
+        }
+
+        function verifyTeacherPasscode(e) {
+            e.preventDefault();
+            const val = document.getElementById('passcodeInput').value;
+            if (val === '1119') {
+                isTeacherUnlocked = true;
+                document.getElementById('teacherLockIcon').className = 'fa-solid fa-lock-open text-emerald-300';
+                document.getElementById('teacherLockText').innerText = 'Teacher Portal (Unlocked)';
+                document.getElementById('teacherPortalBtn').className = 'bg-emerald-600 text-white font-bold px-4 py-2 rounded-xl text-sm shadow-md transition-all flex items-center gap-2';
+                toggleTeacherPortalModal();
+                alert('✨ Teacher Portal Unlocked!');
+                renderEssaysList();
+            } else {
+                document.getElementById('passcodeError').classList.remove('hidden');
+            }
+        }
+
+        function openReviewModal(essayId) {
+            currentReviewId = essayId;
+            const essays = getEssays();
+            const essay = essays.find(e => e.id === essayId);
+            if (!essay) return;
+
+            document.getElementById('reviewPartBadge').innerText = essay.essayPart;
+            document.getElementById('reviewStudentName').innerText = essay.studentName;
+            document.getElementById('reviewClass').innerText = essay.className;
+
+            // Render Red Annotated version inside Review Modal
+            const { annotatedText } = generateRedAnnotations(essay.essayBody);
+            document.getElementById('reviewEssayBody').innerHTML = annotatedText;
+
+            const wordCount = essay.essayBody.trim().split(/\s+/).length;
+            document.getElementById('reviewWordCount').innerText = `${wordCount} words`;
+
+            const aiScore = essay.aiPercentage || calculateAILikelihood(essay.essayBody);
+            document.getElementById('modalAiPercentText').innerText = `${aiScore}% AI`;
+            const mBar = document.getElementById('modalAiGaugeBar');
+            mBar.style.width = `${aiScore}%`;
+            
+            const mVerdict = document.getElementById('modalAiVerdictText');
+            if (aiScore >= 70) {
+                mBar.className = 'h-full rounded-full transition-all duration-300 bg-red-500';
+                mVerdict.innerText = 'High AI Probability 🚨 (Artificial phrasing patterns noted)';
+            } else if (aiScore >= 38) {
+                mBar.className = 'h-full rounded-full transition-all duration-300 bg-amber-400';
+                mVerdict.innerText = 'Mixed AI Assistance 🤖 (Some artificial phrasing noted)';
+            } else {
+                mBar.className = 'h-full rounded-full transition-all duration-300 bg-emerald-400';
+                mVerdict.innerText = 'Human Heart & Soul 💖 (Authentic student writing detected)';
+            }
+
+            document.getElementById('sliderC').value = essay.scores.C;
+            document.getElementById('sliderCA').value = essay.scores.CA;
+            document.getElementById('sliderO').value = essay.scores.O;
+            document.getElementById('sliderL').value = essay.scores.L;
+            document.getElementById('teacherFeedbackText').value = essay.teacherFeedback || '';
+
+            updateTeacherSliders();
+            document.getElementById('reviewModal').classList.remove('hidden');
+        }
+
+        function closeReviewModal() {
+            document.getElementById('reviewModal').classList.add('hidden');
+        }
+
+        function updateTeacherSliders() {
+            const c = parseInt(document.getElementById('sliderC').value);
+            const ca = parseInt(document.getElementById('sliderCA').value);
+            const o = parseInt(document.getElementById('sliderO').value);
+            const l = parseInt(document.getElementById('sliderL').value);
+
+            document.getElementById('valC').innerText = c;
+            document.getElementById('valCA').innerText = ca;
+            document.getElementById('valO').innerText = o;
+            document.getElementById('valL').innerText = l;
+
+            const total = c + ca + o + l;
+            document.getElementById('teacherTotalScore').innerText = `${total} / 20`;
+        }
+
+        function addTagToFeedback(tag) {
+            const fb = document.getElementById('teacherFeedbackText');
+            if (fb.value.trim().length > 0) {
+                fb.value += ' ' + tag;
+            } else {
+                fb.value = tag;
+            }
+        }
+
+        function saveTeacherEvaluation() {
+            if (!isTeacherUnlocked) {
+                alert('🔒 Unlock Teacher Portal first!');
+                toggleTeacherPortalModal();
+                return;
+            }
+
+            const c = parseInt(document.getElementById('sliderC').value);
+            const ca = parseInt(document.getElementById('sliderCA').value);
+            const o = parseInt(document.getElementById('sliderO').value);
+            const l = parseInt(document.getElementById('sliderL').value);
+            const feedback = document.getElementById('teacherFeedbackText').value;
+
+            const essays = getEssays();
+            const index = essays.findIndex(e => e.id === currentReviewId);
+            if (index !== -1) {
+                essays[index].scores = { C: c, CA: ca, O: o, L: l };
+                essays[index].totalScore = c + ca + o + l;
+                essays[index].teacherFeedback = feedback;
+                essays[index].status = 'Approved Grade';
+
+                saveEssays(essays);
+                closeReviewModal();
+                alert('✅ Official grade approved and saved to repository!');
+            }
+        }
+
+        function deleteCurrentEssay() {
+            if (!isTeacherUnlocked) {
+                alert('🔒 Teacher Portal unlock required.');
+                toggleTeacherPortalModal();
+                return;
+            }
+
+            if (confirm('Delete this essay entry?')) {
+                let essays = getEssays();
+                essays = essays.filter(e => e.id !== currentReviewId);
+                saveEssays(essays);
+                closeReviewModal();
+            }
+        }
+
+        function printStudentReportCard() {
+            const essays = getEssays();
+            const essay = essays.find(e => e.id === currentReviewId);
+            if (!essay) return;
+
+            document.getElementById('printName').innerText = essay.studentName;
+            document.getElementById('printClass').innerText = essay.className;
+            document.getElementById('printPart').innerText = essay.essayPart;
+            document.getElementById('printAiScore').innerText = `${essay.aiPercentage || 0}% AI Likelihood`;
+
+            document.getElementById('printC').innerText = `${essay.scores.C} / 5`;
+            document.getElementById('printCA').innerText = `${essay.scores.CA} / 5`;
+            document.getElementById('printO').innerText = `${essay.scores.O} / 5`;
+            document.getElementById('printL').innerText = `${essay.scores.L} / 5`;
+
+            document.getElementById('printTotal').innerText = `${essay.totalScore} / 20`;
+            const band = getBandGrade(essay.totalScore);
+            document.getElementById('printGrade').innerText = band.label;
+            document.getElementById('printRemarks').innerText = essay.teacherFeedback || 'Good effort!';
+            document.getElementById('printDate').innerText = essay.date;
+
+            document.getElementById('printableReport').classList.remove('hidden');
+            window.print();
+            document.getElementById('printableReport').classList.add('hidden');
+        }
+
+        function initCharts() {
+            const radarCtx = document.getElementById('rubricRadarChart').getContext('2d');
+            radarChartInstance = new Chart(radarCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Content (C)', 'Comm. Achievement (CA)', 'Organisation (O)', 'Language (L)'],
+                    datasets: [{
+                        label: 'Class Average Score (/5)',
+                        data: [4.0, 3.8, 4.2, 3.9],
+                        backgroundColor: 'rgba(193, 161, 232, 0.4)',
+                        borderColor: '#9B51E0',
+                        pointBackgroundColor: '#9B51E0',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            min: 0,
+                            max: 5,
+                            ticks: { stepSize: 1 }
+                        }
+                    }
+                }
+            });
+
+            const barCtx = document.getElementById('gradeBarChart').getContext('2d');
+            gradeChartInstance = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Band 5 (A+)', 'Band 4 (A)', 'Band 3 (B+)', 'Band 2 (C)', 'Band 1 (D/E)'],
+                    datasets: [{
+                        label: 'Number of Students',
+                        data: [1, 1, 0, 0, 0],
+                        backgroundColor: ['#10B981', '#14B8A6', '#3B82F6', '#F59E0B', '#EF4444'],
+                        borderRadius: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, ticks: { precision: 0 } }
+                    }
+                }
+            });
+
+            updateCharts();
+        }
+
+        function updateCharts() {
+            if (!radarChartInstance || !gradeChartInstance) return;
+
+            const essays = getEssays();
+            if (essays.length === 0) return;
+
+            let sumC = 0, sumCA = 0, sumO = 0, sumL = 0;
+            const bands = { 'Band 5': 0, 'Band 4': 0, 'Band 3': 0, 'Band 2': 0, 'Band 1': 0 };
+
+            essays.forEach(e => {
+                sumC += e.scores.C;
+                sumCA += e.scores.CA;
+                sumO += e.scores.O;
+                sumL += e.scores.L;
+
+                const bandLabel = getBandGrade(e.totalScore).label.split(' ')[0] + ' ' + getBandGrade(e.totalScore).label.split(' ')[1];
+                if (bands[bandLabel] !== undefined) {
+                    bands[bandLabel]++;
+                }
+            });
+
+            const count = essays.length;
+            radarChartInstance.data.datasets[0].data = [
+                (sumC / count).toFixed(1),
+                (sumCA / count).toFixed(1),
+                (sumO / count).toFixed(1),
+                (sumL / count).toFixed(1)
+            ];
+            radarChartInstance.update();
+
+            gradeChartInstance.data.datasets[0].data = [
+                bands['Band 5'],
+                bands['Band 4'],
+                bands['Band 3'],
+                bands['Band 2'],
+                bands['Band 1']
+            ];
+            gradeChartInstance.update();
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
