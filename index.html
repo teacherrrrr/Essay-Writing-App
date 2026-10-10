@@ -822,12 +822,16 @@ In conclusion, I agree that online shopping offers great advantages for students
             }
         ];
 
-        window.onload = function() {
+       window.onload = function() {
+            // Check if stored assignments are missing or contain the old '5 Murni' default
+            let storedAssignments = localStorage.getItem('spm_class_assignments');
+            if (!storedAssignments || storedAssignments.includes('5 Murni')) {
+                localStorage.setItem('spm_class_assignments', JSON.stringify(defaultClassAssignments));
+            }
+
+            // Ensure sample essays are loaded
             if (!localStorage.getItem('spm_essays_data')) {
                 localStorage.setItem('spm_essays_data', JSON.stringify(initialSampleEssays));
-            }
-            if (!localStorage.getItem('spm_class_assignments')) {
-                localStorage.setItem('spm_class_assignments', JSON.stringify(defaultClassAssignments));
             }
 
             populateClassDropdowns();
