@@ -739,6 +739,9 @@
         let radarChartInstance = null;
         let gradeChartInstance = null;
 
+        // Central Web App URL
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzyV6TWhEYH7YJ8ntkstmXOIrB24rMcf4FG3ykVz13U0Z6UR-4aRpseeFqwWB5rLCp4xQ/exec';
+
         // Common Grammar / Spelling / Syntax Error Rules for Malaysian SPM Students
         const grammarRules = [
             { pattern: /\bshe go\b/gi, err: "she go", fix: "she goes", cat: "Subject-Verb Agreement", exp: "Use singular verb 'goes' with singular pronoun 'she'." },
@@ -822,7 +825,7 @@ In conclusion, I agree that online shopping offers great advantages for students
             }
         ];
 
-       window.onload = function() {
+        window.onload = function() {
             let storedAssignments = localStorage.getItem('spm_class_assignments');
             if (!storedAssignments || storedAssignments.includes('5 Murni')) {
                 localStorage.setItem('spm_class_assignments', JSON.stringify(defaultClassAssignments));
@@ -835,9 +838,36 @@ In conclusion, I agree that online shopping offers great advantages for students
             populateClassDropdowns();
             onClassSelected();
             evaluateEssayLive();
-            renderEssaysList();
             initCharts();
+            
+            // Fetch live student submissions directly from Google Sheets
+            fetchLiveEssaysFromSheet();
         };
+
+        function fetchLiveEssaysFromSheet() {
+            fetch(SCRIPT_URL)
+                .then(res => res.json())
+                .then(remoteEssays => {
+                    if (Array.isArray(remoteEssays) && remoteEssays.length > 0) {
+                        const localEssays = JSON.parse(localStorage.getItem('spm_essays_data') || '[]');
+                        const combined = [...remoteEssays];
+                        
+                        localEssays.forEach(local => {
+                            if (!combined.some(r => r.studentName === local.studentName && r.essayBody === local.essayBody)) {
+                                combined.push(local);
+                            }
+                        });
+                        
+                        localStorage.setItem('spm_essays_data', JSON.stringify(combined));
+                    }
+                    renderEssaysList();
+                    updateCharts();
+                })
+                .catch(err => {
+                    console.error('Error syncing live submissions from Google Sheet:', err);
+                    renderEssaysList();
+                });
+        }
 
         // Data Storage Getters/Setters
         function getEssays() {
@@ -1301,8 +1331,6 @@ In conclusion, I agree that online shopping offers great advantages for students
             saveEssays(essays);
 
             // 2. Post directly to Google Sheets central database
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzDL_ZSy7AdcUGnnyQD6Lwx9eBgJzSjTLCUWt0hxOzSEpPwI-UZinvHRF4pp32N_QkhvQ/exec';
-
             const payload = {
                 studentName: name,
                 className: className,
