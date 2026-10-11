@@ -1235,15 +1235,66 @@ In conclusion, I agree that online shopping offers great advantages for students
         }
 
         function handleEssaySubmit(e) {
-            e.preventDefault();
-            const name = document.getElementById('studentName').value;
-            const className = document.getElementById('studentClass').value;
-            const body = document.getElementById('essayBody').value;
+    e.preventDefault();
+    const name = document.getElementById('studentName').value;
+    const className = document.getElementById('studentClass').value;
+    const body = document.getElementById('essayBody').value;
 
-            if (!className) {
-                alert('Please select a valid class! Ask teacher to add a class if none exist.');
-                return;
-            }
+    if (!className) {
+        alert('Please select a valid class! Ask teacher to add a class if none exist.');
+        return;
+    }
+
+    // Grab selected essay part and generated scores (adjust element IDs if named differently)
+    const essayPart = document.getElementById('essayPartSelect')?.value || 'Part 1';
+    const score = document.getElementById('gradeDisplay')?.innerText || 'Pending';
+    const aiScore = document.getElementById('aiScanScore')?.innerText || 'N/A';
+
+    // 1. Save locally on student phone
+    const newEssay = {
+        id: Date.now().toString(),
+        studentName: name,
+        className: className,
+        essayPart: essayPart,
+        body: body,
+        score: score,
+        aiScore: aiScore,
+        timestamp: new Date().toISOString()
+    };
+
+    let essays = JSON.parse(localStorage.getItem('spm_essays_data')) || [];
+    essays.unshift(newEssay);
+    localStorage.setItem('spm_essays_data', JSON.stringify(essays));
+
+    // 2. Send submission directly to Google Sheet
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzDL_ZSy7AdcUGnnyQD6Lwx9eBgJzSjTLCUWt0hxOzSEpPwI-UZinvHRF4pp32N_QkhvQ/exec';
+
+    const payload = {
+        studentName: name,
+        className: className,
+        essayPart: essayPart,
+        score: score,
+        essayText: body,
+        aiScore: aiScore
+    };
+
+    fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(() => {
+        alert('✨ Essay submitted successfully and sent to teacher!');
+        renderEssaysList();
+    })
+    .catch(err => {
+        console.error('Error sending to Google Sheet:', err);
+        alert('Saved locally, but failed to reach teacher Google Sheet. Please check internet connection.');
+    });
+}
 
             const assignments = getClassAssignments();
             const taskPrompt = (className && assignments[className]) ? assignments[className].prompt : 'Assigned SPM Essay Task';
