@@ -1245,8 +1245,10 @@ In conclusion, I agree that online shopping offers great advantages for students
         return;
     }
 
-    // Grab selected essay part and generated scores (adjust element IDs if named differently)
-    const essayPart = document.getElementById('essayPartSelect')?.value || 'Part 1';
+    const assignments = getClassAssignments();
+    const taskPrompt = (className && assignments[className]) ? assignments[className].prompt : 'Assigned SPM Essay Task';
+    const part = (className && assignments[className]) ? assignments[className].part : 'Part 3';
+
     const score = document.getElementById('gradeDisplay')?.innerText || 'Pending';
     const aiScore = document.getElementById('aiScanScore')?.innerText || 'N/A';
 
@@ -1255,7 +1257,7 @@ In conclusion, I agree that online shopping offers great advantages for students
         id: Date.now().toString(),
         studentName: name,
         className: className,
-        essayPart: essayPart,
+        essayPart: part,
         body: body,
         score: score,
         aiScore: aiScore,
@@ -1272,7 +1274,7 @@ In conclusion, I agree that online shopping offers great advantages for students
     const payload = {
         studentName: name,
         className: className,
-        essayPart: essayPart,
+        essayPart: part,
         score: score,
         essayText: body,
         aiScore: aiScore
@@ -1285,15 +1287,12 @@ In conclusion, I agree that online shopping offers great advantages for students
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(payload)
-    })
-    .then(() => {
-        alert('✨ Essay submitted successfully and sent to teacher!');
-        renderEssaysList();
-    })
-    .catch(err => {
-        console.error('Error sending to Google Sheet:', err);
-        alert('Saved locally, but failed to reach teacher Google Sheet. Please check internet connection.');
     });
+
+    alert('✨ Essay submitted successfully!');
+    if (typeof renderEssaysList === 'function') {
+        renderEssaysList();
+    }
 }
 
             const assignments = getClassAssignments();
