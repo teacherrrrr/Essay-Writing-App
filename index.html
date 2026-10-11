@@ -1249,18 +1249,33 @@ In conclusion, I agree that online shopping offers great advantages for students
     const taskPrompt = (className && assignments[className]) ? assignments[className].prompt : 'Assigned SPM Essay Task';
     const part = (className && assignments[className]) ? assignments[className].part : 'Part 3';
 
-    const score = document.getElementById('gradeDisplay')?.innerText || 'Pending';
-    const aiScore = document.getElementById('aiScanScore')?.innerText || 'N/A';
+    const autoTitle = taskPrompt.length > 35 ? taskPrompt.substring(0, 35) + '...' : taskPrompt;
 
-    // 1. Save locally on student phone
+    const words = body.trim().length > 0 ? body.trim().split(/\s+/).length : 0;
+    const scoreC = Math.min(5, Math.max(2, Math.floor(words / 40)));
+    const scoreCA = Math.min(5, Math.max(2, Math.floor(words / 45)));
+    const scoreO = Math.min(5, Math.max(2, Math.floor(words / 50)));
+    const scoreL = Math.min(5, Math.max(2, Math.floor(words / 45)));
+    const total = scoreC + scoreCA + scoreO + scoreL;
+    const formattedScore = `${total} / 20`;
+
+    const aiScore = typeof calculateAILikelihood === 'function' ? calculateAILikelihood(body) : 'N/A';
+
+    const { annotatedText, detectedErrors } = typeof generateRedAnnotations === 'function' 
+        ? generateRedAnnotations(body) 
+        : { annotatedText: body, detectedErrors: [] };
+
     const newEssay = {
         id: Date.now().toString(),
         studentName: name,
         className: className,
         essayPart: part,
+        title: autoTitle,
         body: body,
-        score: score,
+        score: formattedScore,
         aiScore: aiScore,
+        annotatedText: annotatedText,
+        detectedErrors: detectedErrors,
         timestamp: new Date().toISOString()
     };
 
@@ -1268,14 +1283,13 @@ In conclusion, I agree that online shopping offers great advantages for students
     essays.unshift(newEssay);
     localStorage.setItem('spm_essays_data', JSON.stringify(essays));
 
-    // 2. Send submission directly to Google Sheet
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzDL_ZSy7AdcUGnnyQD6Lwx9eBgJzSjTLCUWt0hxOzSEpPwI-UZinvHRF4pp32N_QkhvQ/exec';
 
     const payload = {
         studentName: name,
         className: className,
         essayPart: part,
-        score: score,
+        score: formattedScore,
         essayText: body,
         aiScore: aiScore
     };
@@ -1294,11 +1308,6 @@ In conclusion, I agree that online shopping offers great advantages for students
         renderEssaysList();
     }
 }
-
-            const assignments = getClassAssignments();
-            const taskPrompt = (className && assignments[className]) ? assignments[className].prompt : 'Assigned SPM Essay Task';
-            const part = (className && assignments[className]) ? assignments[className].part : 'Part 3';
-
             // Auto title generated from assigned prompt
             const autoTitle = taskPrompt.length > 35 ? taskPrompt.substring(0, 35) + '...' : taskPrompt;
 
