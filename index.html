@@ -543,7 +543,7 @@
         </div>
     </footer>
 
-    <!-- MODAL 1: Teacher Security Passcode Modal (No code displayed) -->
+    <!-- MODAL 1: Teacher Security Passcode Modal -->
     <div id="passcodeModal" class="fixed inset-0 bg-purple-950/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="pastel-card bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border-2 border-pastel-lavender">
             <div class="text-center">
@@ -823,13 +823,11 @@ In conclusion, I agree that online shopping offers great advantages for students
         ];
 
        window.onload = function() {
-            // Check if stored assignments are missing or contain the old '5 Murni' default
             let storedAssignments = localStorage.getItem('spm_class_assignments');
             if (!storedAssignments || storedAssignments.includes('5 Murni')) {
                 localStorage.setItem('spm_class_assignments', JSON.stringify(defaultClassAssignments));
             }
 
-            // Ensure sample essays are loaded
             if (!localStorage.getItem('spm_essays_data')) {
                 localStorage.setItem('spm_essays_data', JSON.stringify(initialSampleEssays));
             }
@@ -1118,7 +1116,6 @@ In conclusion, I agree that online shopping offers great advantages for students
             gradeBadge.innerText = band.label;
             gradeBadge.className = `font-bold px-3 py-1 rounded-xl text-sm shadow-2xs ${band.color}`;
 
-            // Calculate & Render Big Speedometer AI Gauge
             const aiScore = calculateAILikelihood(body);
             updateBigAiSpeedometer(aiScore);
 
@@ -1165,16 +1162,13 @@ In conclusion, I agree that online shopping offers great advantages for students
             return Math.min(99, Math.max(3, Math.round(score)));
         }
 
-        // BIG SPEEDOMETER AI GAUGE METER ANIMATION
         function updateBigAiSpeedometer(percent) {
             const bigText = document.getElementById('aiPercentBigText');
             bigText.innerText = `${percent}% AI`;
 
-            // Animate arc dashoffset (251.2 total circumference)
             const strokeDashoffset = 251.2 - (251.2 * (percent / 100));
             document.getElementById('speedometerArc').style.strokeDashoffset = strokeDashoffset;
 
-            // Rotate Needle: -90deg is 0%, +90deg is 100%
             const angle = -90 + (180 * (percent / 100));
             document.getElementById('needleGroup').style.transform = `rotate(${angle}deg)`;
 
@@ -1194,7 +1188,6 @@ In conclusion, I agree that online shopping offers great advantages for students
             }
         }
 
-        // RED ANNOTATION ENGINE - Generates inline red strikethroughs & green corrections
         function generateRedAnnotations(text) {
             let annotatedText = escapeHtml(text);
             const detectedErrors = [];
@@ -1210,7 +1203,6 @@ In conclusion, I agree that online shopping offers great advantages for students
                         exp: rule.exp
                     });
 
-                    // Replace in HTML with red inline annotation
                     const replacementHtml = `<span class="inline-flex items-center gap-1 bg-red-50 text-red-700 border border-red-200 px-1.5 py-0.5 rounded-md font-bold my-0.5"><line-through class="line-through decoration-red-500 text-red-600">${escapeHtml(matchedStr)}</line-through> <i class="fa-solid fa-arrow-right text-[10px] text-gray-400"></i> <span class="text-emerald-700 bg-emerald-100 px-1 rounded">${rule.fix}</span></span>`;
                     
                     const regex = new RegExp(`\\b${escapeRegExp(matchedStr)}\\b`, 'g');
@@ -1235,94 +1227,37 @@ In conclusion, I agree that online shopping offers great advantages for students
         }
 
         function handleEssaySubmit(e) {
-    e.preventDefault();
-    const name = document.getElementById('studentName').value;
-    const className = document.getElementById('studentClass').value;
-    const body = document.getElementById('essayBody').value;
+            e.preventDefault();
+            const name = document.getElementById('studentName').value;
+            const className = document.getElementById('studentClass').value;
+            const body = document.getElementById('essayBody').value;
 
-    if (!className) {
-        alert('Please select a valid class! Ask teacher to add a class if none exist.');
-        return;
-    }
+            if (!className) {
+                alert('Please select a valid class! Ask teacher to add a class if none exist.');
+                return;
+            }
 
-    const assignments = getClassAssignments();
-    const taskPrompt = (className && assignments[className]) ? assignments[className].prompt : 'Assigned SPM Essay Task';
-    const part = (className && assignments[className]) ? assignments[className].part : 'Part 3';
+            const assignments = getClassAssignments();
+            const taskPrompt = (className && assignments[className]) ? assignments[className].prompt : 'Assigned SPM Essay Task';
+            const part = (className && assignments[className]) ? assignments[className].part : 'Part 3';
 
-    const autoTitle = taskPrompt.length > 35 ? taskPrompt.substring(0, 35) + '...' : taskPrompt;
-
-    const words = body.trim().length > 0 ? body.trim().split(/\s+/).length : 0;
-    const scoreC = Math.min(5, Math.max(2, Math.floor(words / 40)));
-    const scoreCA = Math.min(5, Math.max(2, Math.floor(words / 45)));
-    const scoreO = Math.min(5, Math.max(2, Math.floor(words / 50)));
-    const scoreL = Math.min(5, Math.max(2, Math.floor(words / 45)));
-    const total = scoreC + scoreCA + scoreO + scoreL;
-    const formattedScore = `${total} / 20`;
-
-    const aiScore = typeof calculateAILikelihood === 'function' ? calculateAILikelihood(body) : 'N/A';
-
-    const { annotatedText, detectedErrors } = typeof generateRedAnnotations === 'function' 
-        ? generateRedAnnotations(body) 
-        : { annotatedText: body, detectedErrors: [] };
-
-    const newEssay = {
-        id: Date.now().toString(),
-        studentName: name,
-        className: className,
-        essayPart: part,
-        title: autoTitle,
-        body: body,
-        score: formattedScore,
-        aiScore: aiScore,
-        annotatedText: annotatedText,
-        detectedErrors: detectedErrors,
-        timestamp: new Date().toISOString()
-    };
-
-    let essays = JSON.parse(localStorage.getItem('spm_essays_data')) || [];
-    essays.unshift(newEssay);
-    localStorage.setItem('spm_essays_data', JSON.stringify(essays));
-
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzDL_ZSy7AdcUGnnyQD6Lwx9eBgJzSjTLCUWt0hxOzSEpPwI-UZinvHRF4pp32N_QkhvQ/exec';
-
-    const payload = {
-        studentName: name,
-        className: className,
-        essayPart: part,
-        score: formattedScore,
-        essayText: body,
-        aiScore: aiScore
-    };
-
-    fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-    });
-
-    alert('✨ Essay submitted successfully!');
-    if (typeof renderEssaysList === 'function') {
-        renderEssaysList();
-    }
-}
-            // Auto title generated from assigned prompt
             const autoTitle = taskPrompt.length > 35 ? taskPrompt.substring(0, 35) + '...' : taskPrompt;
 
-            const words = body.trim().split(/\s+/).length;
+            const words = body.trim().length > 0 ? body.trim().split(/\s+/).length : 0;
             const scoreC = Math.min(5, Math.max(2, Math.floor(words / 40)));
             const scoreCA = Math.min(5, Math.max(2, Math.floor(words / 45)));
             const scoreO = Math.min(5, Math.max(2, Math.floor(words / 50)));
             const scoreL = Math.min(5, Math.max(2, Math.floor(words / 45)));
             const total = scoreC + scoreCA + scoreO + scoreL;
-            const aiScore = calculateAILikelihood(body);
+            const formattedScore = `${total} / 20`;
 
-            // Generate Red Annotations
-            const { annotatedText, detectedErrors } = generateRedAnnotations(body);
+            const aiScore = typeof calculateAILikelihood === 'function' ? calculateAILikelihood(body) : 'N/A';
 
-            // Render Red Annotations immediately on student screen
+            const { annotatedText, detectedErrors } = typeof generateRedAnnotations === 'function' 
+                ? generateRedAnnotations(body) 
+                : { annotatedText: body, detectedErrors: [] };
+
+            // Render Red Annotations on screen
             const container = document.getElementById('annotationContainer');
             container.classList.remove('hidden');
             document.getElementById('annotatedTextDisplay').innerHTML = annotatedText;
@@ -1343,6 +1278,7 @@ In conclusion, I agree that online shopping offers great advantages for students
                 `).join('');
             }
 
+            // 1. Save locally in student browser
             const newEssay = {
                 id: 'essay-' + Date.now(),
                 studentName: name,
@@ -1353,6 +1289,8 @@ In conclusion, I agree that online shopping offers great advantages for students
                 scores: { C: scoreC, CA: scoreCA, O: scoreO, L: scoreL },
                 totalScore: total,
                 aiPercentage: aiScore,
+                annotatedText: annotatedText,
+                detectedErrors: detectedErrors,
                 status: 'Pending Teacher Review',
                 teacherFeedback: 'Submitted for official teacher verification.',
                 date: new Date().toISOString().split('T')[0]
@@ -1362,7 +1300,28 @@ In conclusion, I agree that online shopping offers great advantages for students
             essays.unshift(newEssay);
             saveEssays(essays);
 
-            // Scroll smoothly down to Red Annotations view
+            // 2. Post directly to Google Sheets central database
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzDL_ZSy7AdcUGnnyQD6Lwx9eBgJzSjTLCUWt0hxOzSEpPwI-UZinvHRF4pp32N_QkhvQ/exec';
+
+            const payload = {
+                studentName: name,
+                className: className,
+                essayPart: part,
+                score: formattedScore,
+                essayText: body,
+                aiScore: `${aiScore}% AI`
+            };
+
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            alert('✨ Essay submitted successfully and sent to teacher!');
             container.scrollIntoView({ behavior: 'smooth' });
         }
 
@@ -1500,24 +1459,23 @@ Fortunately, local volunteers helped us evacuation safely. It was a memorable ex
         }
 
         function verifyTeacherPasscode(e) {
-    e.preventDefault();
-    const val = document.getElementById('passcodeInput').value;
-    if (val === '1119') {
-        isTeacherUnlocked = true;
-        document.getElementById('teacherLockIcon').className = 'fa-solid fa-lock-open text-emerald-300';
-        document.getElementById('teacherLockText').innerText = 'Teacher Portal (Unlocked)';
-        document.getElementById('teacherPortalBtn').className = 'bg-emerald-600 text-white font-bold px-4 py-2 rounded-xl text-sm shadow-md transition-all flex items-center gap-2';
-        toggleTeacherPortalModal();
-        alert('✨ Teacher Portal Unlocked!');
-        
-        // REVEAL THE TEACHER MANAGER PANEL UPON UNLOCKING
-        document.getElementById('teacherPromptManager').style.display = 'block';
+            e.preventDefault();
+            const val = document.getElementById('passcodeInput').value;
+            if (val === '1119') {
+                isTeacherUnlocked = true;
+                document.getElementById('teacherLockIcon').className = 'fa-solid fa-lock-open text-emerald-300';
+                document.getElementById('teacherLockText').innerText = 'Teacher Portal (Unlocked)';
+                document.getElementById('teacherPortalBtn').className = 'bg-emerald-600 text-white font-bold px-4 py-2 rounded-xl text-sm shadow-md transition-all flex items-center gap-2';
+                toggleTeacherPortalModal();
+                alert('✨ Teacher Portal Unlocked!');
+                
+                document.getElementById('teacherPromptManager').style.display = 'block';
 
-        renderEssaysList();
-    } else {
-        document.getElementById('passcodeError').classList.remove('hidden');
-    }
-}
+                renderEssaysList();
+            } else {
+                document.getElementById('passcodeError').classList.remove('hidden');
+            }
+        }
 
         function openReviewModal(essayId) {
             currentReviewId = essayId;
@@ -1529,7 +1487,6 @@ Fortunately, local volunteers helped us evacuation safely. It was a memorable ex
             document.getElementById('reviewStudentName').innerText = essay.studentName;
             document.getElementById('reviewClass').innerText = essay.className;
 
-            // Render Red Annotated version inside Review Modal
             const { annotatedText } = generateRedAnnotations(essay.essayBody);
             document.getElementById('reviewEssayBody').innerHTML = annotatedText;
 
